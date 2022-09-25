@@ -62,4 +62,77 @@ public class AddressBook {
 
         }
     }
+    public List<Contacts> retrieveDataBetweenRange() throws SQLException {
+        ResultSet resultSet = null;
+        List<Contacts> employeeInfoList = new ArrayList<>();
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            String sql = "select * from address_book where start_date between '2020-08-01' AND '2020-09-30'";
+            resultSet = statement.executeQuery(sql);
+            int count = 1;
+            while (resultSet.next()) {
+                count++;
+                Contacts contacts = new Contacts();
+                contacts.setFirstName(resultSet.getString("firstName"));
+                contacts.setLastName(resultSet.getString("lastName"));
+                contacts.setAddress(resultSet.getString("address"));
+                contacts.setCity(resultSet.getString("city"));
+                contacts.setState(resultSet.getString("state"));
+                contacts.setZip(resultSet.getLong("zip"));
+                contacts.setPhoneNumber(resultSet.getLong("phoneNumber"));
+                contacts.setEmail(resultSet.getString("email"));
+                System.out.println(employeeInfoList.add(contacts));;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return employeeInfoList;
+    }
+    public List<Contacts> retrieveDataByValue() throws SQLException {
+        ResultSet resultSet = null;
+        List<Contacts> employeeInfoList = new ArrayList<>();
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            String sql = "select * from address_book where start_date between '2020-08-01' and '2020-09-30' group by city or state";
+            resultSet = statement.executeQuery(sql);
+            int count = 1;
+            while (resultSet.next()) {
+                count++;
+                Contacts contacts = new Contacts();
+                contacts.setFirstName(resultSet.getString("firstName"));
+                contacts.setLastName(resultSet.getString("lastName"));
+                contacts.setAddress(resultSet.getString("address"));
+                contacts.setCity(resultSet.getString("city"));
+                contacts.setState(resultSet.getString("state"));
+                contacts.setZip(resultSet.getLong("zip"));
+                contacts.setPhoneNumber(resultSet.getLong("phoneNumber"));
+                contacts.setEmail(resultSet.getString("email"));
+                System.out.println(employeeInfoList.add(contacts));;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return employeeInfoList;
+    }
+    public void insertData(Contacts info) {
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            String sql = "insert into address_book(firstName,lastName,address,city,state,zip,phoneNumber,email) " +
+                    "values ('" + info.getFirstName() + "','" + info.getLastName() + "'," +
+                    "'" + info.getAddress() + "','" + info.getCity() + "'," +
+                    "'" + info.getState() + "',"+ info.getZip() + "',"+
+                    "'" + info.getPhoneNumber() + "'," + info.getEmail() + "')";
+            int result = statement.executeUpdate(sql);
+            if (result == 1) {
+                System.out.println("insert query");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 }
+
+
+
+
+
